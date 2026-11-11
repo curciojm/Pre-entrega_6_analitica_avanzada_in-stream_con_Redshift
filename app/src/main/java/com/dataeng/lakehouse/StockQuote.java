@@ -1,8 +1,9 @@
-
+// representa la unidad básica de información que circula por nuestro pipeline: una cotización individual recibida desde Kinesis
 package com.dataeng.lakehouse;
 
 import java.io.Serializable;
-
+// Serializable permite que los objetos puedan serializarse y reconstruirse. 
+// Esto es relevante para el procesamiento distribuido y la gestión del estado de Flink
 public class StockQuote implements Serializable {
 
     private static final long serialVersionUID = 1L;

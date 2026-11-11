@@ -11,3 +11,12 @@ lakehouse_bucket_name       = "REPLACE_WITH_LAKEHOUSE_BUCKET_NAME"
 
 # Flink application
 flink_jar_path = "../app/target/stock-lakehouse.jar"
+
+# Amazon Redshift Provisioned
+redshift_cluster_identifier = "redshift-lakehouse-dev"
+redshift_database_name      = "analytics"
+redshift_master_username    = "admin"
+
+# Definir según disponibilidad y costo en us-east-2
+redshift_node_type          = "REPLACE_WITH_NODE_TYPE"
+redshift_number_of_nodes    = 1

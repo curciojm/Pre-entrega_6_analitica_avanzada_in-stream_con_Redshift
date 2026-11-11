@@ -5,8 +5,11 @@ package com.dataeng.lakehouse;
 
 import java.io.Serializable;
 
+// implements Serializable: indica que los objetos de esta clase pueden serializarse, 
+// es decir, convertirse en una representación que permita almacenarlos o transmitirlos
 public class StockAccumulator implements Serializable {
-
+// serialVersionUID: es un identificador de versión de la clase serializable.
+// Permite verificar la compatibilidad entre versiones durante la deserialización
     private static final long serialVersionUID = 1L;
 
     private String ticker;
@@ -15,9 +18,12 @@ public class StockAccumulator implements Serializable {
     private double maxPrice;
     private double minPrice;
 // this en Java hace referencia al objeto actual, es decir, a la instancia de la clase en la que estamos trabajando
+// El constructor inicializa el objeto cuando se crea una instancia
+// getters permiten consultar los atributos y los setters permiten modificarlos
     public StockAccumulator() {
         this.tradeCount = 0;
         this.sumPrice = 0.0;
+        // infinity asi cualquier precio valido seria mayor que el inicial
         this.maxPrice = Double.NEGATIVE_INFINITY;
         this.minPrice = Double.POSITIVE_INFINITY;
     }
@@ -27,6 +33,7 @@ public class StockAccumulator implements Serializable {
     }
 
     public void setTicker(String ticker) {
+        // this es atributo de la instancia y la segunda el parametro del metodo
         this.ticker = ticker;
     }
 

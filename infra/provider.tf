@@ -3,7 +3,7 @@ provider "aws" {
 
   default_tags {
     tags = {
-      Project     = "Pre-entrega-5-Lakehouse"
+      Project     = "Pre-entrega-6-Lakehouse"
       Environment = var.environment
       ManagedBy   = "Terraform"
     }

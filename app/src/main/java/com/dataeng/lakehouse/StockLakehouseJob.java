@@ -1,4 +1,5 @@
-
+// es el punto de entrada y orquestador de toda la aplicación Flink
+// donde residen los valores stockquote sueltos
 package com.dataeng.lakehouse;
 
 import java.time.Duration;
@@ -23,20 +24,21 @@ import org.apache.iceberg.flink.sink.FlinkSink;
 import org.apache.iceberg.flink.TableLoader;
 
 public class StockLakehouseJob {
-
+// main es el punto de entrada
     public static void main(String[] args) throws Exception {
-
+// inicio del entorno stream
         StreamExecutionEnvironment env =
                 StreamExecutionEnvironment.getExecutionEnvironment();
-
+// 60 segundos
         env.enableCheckpointing(60_000L);
-
+// recupera las propiedades que configuramos desde Terraform en el bloque environment_properties
         Map<String, Properties> applicationProperties =
                 KinesisAnalyticsRuntime.getApplicationProperties();
 
         Properties appConfig =
                 applicationProperties.get("ApplicationProperties");
-
+// Esto permite que el mismo JAR pueda ejecutarse en diferentes entornos sin tener que modificar el código fuente para
+// cambiar el nombre del stream, la región o el bucket
         if (appConfig == null) {
             throw new IllegalStateException(
                     "Missing ApplicationProperties configuration group"
@@ -60,7 +62,8 @@ public class StockLakehouseJob {
         );
 
         Configuration sourceConfig = new Configuration();
-
+// TRIM_HORIZON indica que, cuando el consumidor comienza sin un estado previo recuperable,
+// debe comenzar a leer desde el registro más antiguo todavía disponible en el stream
         sourceConfig.set(
                 KinesisSourceConfigOptions.STREAM_INITIAL_POSITION,
                 KinesisSourceConfigOptions.InitialPosition.TRIM_HORIZON
@@ -79,7 +82,7 @@ public class StockLakehouseJob {
                         WatermarkStrategy.<String>noWatermarks(),
                         "Kinesis Source",
                         TypeInformation.of(String.class)
-                );
+                ); // parsear (o realizar un análisis sintáctico) significa convertir un texto (generalmente un String) en otro tipo de dato o estructura, como un número
         DataStream<StockQuote> stockQuotes =
                 rawEvents
                         .map(StockQuoteParser::parse)
@@ -121,7 +124,7 @@ public class StockLakehouseJob {
                 aggregates
                         .map(new StockAggregateToRowDataMapper())
                         .returns(TypeInformation.of(RowData.class));
-
+// append Indica que la escritura en Iceberg se realizará en modo append, es decir, agregando nuevos registros a la tabla, en lugar de reemplazar su contenido
         FlinkSink.forRowData(icebergRows)
                 .tableLoader(tableLoader)
                 .append();
