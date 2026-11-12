@@ -15,48 +15,36 @@ La infraestructura se administra mediante Terraform y el proyecto es autónomo: 
 
 ## Arquitectura
 
-```text
-                         Python Producer
-                               |
-                               v
-                     AWS Kinesis Data Streams
-                               |
-                 +-------------+-------------+
-                 |                           |
-                 v                           v
-       AWS Managed Flink             Redshift Streaming
-                 |                      Ingestion
-                 |                           |
-         JSON Parsing                 Materialized Views
-                 |                           |
-         Event-time Processing       Raw Streaming Layer
-                 |                           |
-         Watermarks                  Clean Layer
-                 |                           |
-         1-minute Windows            Consumption Layer
-                 |                           |
-         Aggregations                       |
-                 |                           |
-                 v                           |
-          Apache Iceberg                     |
-                 |                           |
-          Amazon S3                          |
-                 |                           |
-          AWS Glue Catalog                   |
-                 |                           |
-                 +-------------+-------------+
-                               |
-                               v
-                    Amazon Redshift
-                               |
-                     External Schema
-                               |
-                     JOIN: Streaming
-                       + Historical
-                               |
-                               v
-                     Analytics Results
-```
+
+flowchart TB
+    P[Python Producer] --> K[AWS Kinesis Data Streams]
+
+    K --> F[AWS Managed Flink]
+    K --> R[Redshift Streaming Ingestion]
+
+    subgraph HIST["Procesamiento histórico"]
+        F --> J[JSON Parsing]
+        J --> E[Event-time Processing]
+        E --> W[Watermarks]
+        W --> T[1-minute Windows]
+        T --> A[Aggregations]
+        A --> I[Apache Iceberg]
+        I --> S[Amazon S3]
+        S --> G[AWS Glue Catalog]
+    end
+
+    subgraph STREAM["Analítica in-stream"]
+        R --> M[Materialized Views]
+        M --> RAW[Raw Streaming Layer]
+        RAW --> C[Clean Layer]
+        C --> CON[Consumption Layer]
+    end
+
+    G --> RS[Amazon Redshift]
+    CON --> RS
+    RS --> EX[External Schema]
+    EX --> JOIN[JOIN: Streaming + Historical]
+    JOIN --> OUT[Analytics Results]
 
 ## Tecnologías
 
@@ -99,7 +87,7 @@ Pre-entrega_6_analitica_avanzada_in-stream_con_Redshift/
 │   │               └── StockWindowFunction.java
 │   └── pom.xml
 │
-├── evidencia.zip/
+├── evidencia.zip
 │   └── Capturas de funcionamiento, integración,
 │       seguridad y monitoreo.
 │
