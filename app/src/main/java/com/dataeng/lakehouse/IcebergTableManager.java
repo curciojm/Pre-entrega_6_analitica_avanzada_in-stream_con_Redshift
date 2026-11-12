@@ -1,4 +1,3 @@
-
 package com.dataeng.lakehouse;
 
 import java.util.HashMap;
@@ -109,7 +108,6 @@ public class IcebergTableManager {
                 );
             }
 
-            // 5. Devolver el loader de la tabla
             return TableLoader.fromCatalog(
                 catalogLoader,
                 tableIdentifier

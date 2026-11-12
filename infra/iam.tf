@@ -1,8 +1,3 @@
-# Data source
-# consulta información de la identidad de AWS que está ejecutando Terraform
-# resource: administra el ciclo de vida de un recurso.
-# data: consulta información existente, sin administrar su creación o eliminación.
-# caller identity es como el permisio inicial
 data "aws_caller_identity" "current" {}
 
 resource "aws_iam_role" "flink_execution" {
@@ -25,7 +20,6 @@ resource "aws_iam_role" "flink_execution" {
   })
 }
 
-# Despues habilitamos el resto de los permisos
 resource "aws_iam_role_policy" "flink_permissions" {
   name = "stock-lakehouse-flink-permissions"
   role = aws_iam_role.flink_execution.id
@@ -119,8 +113,6 @@ resource "aws_iam_role_policy" "flink_permissions" {
         Action = [
           "logs:DescribeLogGroups"
         ]
-        // la API ListStreams es una operación de descubrimiento que no admite restringir 
-        // el acceso mediante el ARN de un stream específico en su política IAM
         Resource = "*"
       },
 
@@ -149,11 +141,8 @@ resource "aws_iam_role_policy" "flink_permissions" {
   })
 }
 
-# IAM Role para Amazon Redshift
 resource "aws_iam_role" "redshift" {
   name = "stock-lakehouse-redshift-${var.environment}"
-
-  # Permite que el servicio Amazon Redshift asuma este rol.
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
 
@@ -171,11 +160,6 @@ resource "aws_iam_role" "redshift" {
   })
 }
 
-
-# ============================================================
-# Permisos de Amazon Redshift
-# ============================================================
-
 resource "aws_iam_role_policy" "redshift_permissions" {
   name = "stock-lakehouse-redshift-permissions-${var.environment}"
   role = aws_iam_role.redshift.id
@@ -185,7 +169,6 @@ resource "aws_iam_role_policy" "redshift_permissions" {
 
     Statement = [
 
-      # Lectura del stream de Kinesis
       {
         Sid    = "KinesisReadPermissions"
         Effect = "Allow"
@@ -201,7 +184,6 @@ resource "aws_iam_role_policy" "redshift_permissions" {
         Resource = aws_kinesis_stream.stock_quotes.arn
       },
 
-      # Descubrimiento de streams
       {
         Sid      = "KinesisListPermissions"
         Effect   = "Allow"
@@ -209,7 +191,6 @@ resource "aws_iam_role_policy" "redshift_permissions" {
         Resource = "*"
       },
 
-      # Lectura del catálogo Glue
       {
         Sid    = "GlueCatalogReadPermissions"
         Effect = "Allow"
@@ -230,7 +211,6 @@ resource "aws_iam_role_policy" "redshift_permissions" {
         ]
       },
 
-      # Acceso de lectura al bucket Lakehouse
       {
         Sid    = "LakehouseBucketReadPermissions"
         Effect = "Allow"
@@ -243,7 +223,6 @@ resource "aws_iam_role_policy" "redshift_permissions" {
         Resource = aws_s3_bucket.lakehouse.arn
       },
 
-      # Lectura de los archivos históricos
       {
         Sid      = "LakehouseObjectReadPermissions"
         Effect   = "Allow"

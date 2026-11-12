@@ -3,11 +3,9 @@ resource "aws_s3_object" "flink_jar" {
 
   key    = "application/stock-lakehouse.jar"
   source = var.flink_jar_path
-  # etag: utiliza el MD5 del archivo para detectar cambios y actualizar el objeto cuando corresponda
   etag = filemd5(var.flink_jar_path)
 }
 
-# Este recurso crea la aplicación de AWS Managed Service for Apache Flink
 resource "aws_kinesisanalyticsv2_application" "stock_lakehouse" {
   provider = aws.untagged
 
@@ -31,7 +29,7 @@ resource "aws_kinesisanalyticsv2_application" "stock_lakehouse" {
           file_key   = aws_s3_object.flink_jar.key
         }
       }
-      # REVISAR ZIPFILE
+
       code_content_type = "ZIPFILE"
     }
 

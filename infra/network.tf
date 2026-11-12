@@ -1,4 +1,3 @@
-
 data "aws_vpc" "default" {
   default = true
 }
@@ -10,7 +9,6 @@ data "aws_subnets" "default" {
   }
 }
 
-# Subnet group para Redshift.
 resource "aws_redshift_subnet_group" "main" {
   name        = "redshift-subnet-group-${var.environment}"
   description = "Subnet group for the Redshift Lakehouse cluster"
@@ -23,14 +21,10 @@ resource "aws_redshift_subnet_group" "main" {
   }
 }
 
-# Security Group de Redshift.
 resource "aws_security_group" "redshift" {
   name        = "redshift-security-group-${var.environment}"
   description = "Security group for the Redshift Lakehouse cluster"
   vpc_id      = data.aws_vpc.default.id
-
-  # Sin reglas de ingreso.
-  # Utilizaremos Query Editor v2 / Data API.
 
   egress {
     description = "Allow outbound traffic"
@@ -47,7 +41,6 @@ resource "aws_security_group" "redshift" {
   }
 }
 
-# Security Group del endpoint privado de Kinesis.
 resource "aws_security_group" "kinesis_endpoint" {
   name        = "kinesis-endpoint-security-group-${var.environment}"
   description = "Allow HTTPS from Redshift to Kinesis VPC endpoint"
@@ -76,8 +69,6 @@ resource "aws_security_group" "kinesis_endpoint" {
   }
 }
 
-# Endpoint privado de Kinesis Data Streams.
-# Una sola AZ para limitar el costo del endpoint.
 resource "aws_vpc_endpoint" "kinesis" {
   vpc_id              = data.aws_vpc.default.id
   service_name        = "com.amazonaws.${var.aws_region}.kinesis-streams"

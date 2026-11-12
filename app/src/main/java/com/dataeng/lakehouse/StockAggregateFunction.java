@@ -1,7 +1,3 @@
-// calculos y genera el stockaggregate
-// implementa AggregateFunction de flink
-
-
 package com.dataeng.lakehouse;
 
 import org.apache.flink.api.common.functions.AggregateFunction;
@@ -11,12 +7,11 @@ public class StockAggregateFunction
                 StockQuote,
                 StockAccumulator,
                 StockAggregate> {
-// Cuando Flink necesita iniciar una agregación, invoca este método para obtener el estado inicial.
     @Override
     public StockAccumulator createAccumulator() {
         return new StockAccumulator();
     }
-// add acumula la cotizacion
+
     @Override
     public StockAccumulator add(
             StockQuote quote,
@@ -52,8 +47,6 @@ public class StockAggregateFunction
     @Override
     public StockAggregate getResult(
             StockAccumulator accumulator) {
-// operador ternario condicion ? valor_si_verdadero : valor_si_falso;
-// en el ejemplo evita que el resultado del acumulador sea 0, si tradecount es mayor que cero hace la operacion sino devuelve 0
         double average = accumulator.getTradeCount() > 0
                 ? accumulator.getSumPrice() / accumulator.getTradeCount()
                 : 0.0;
@@ -68,8 +61,7 @@ public class StockAggregateFunction
                 accumulator.getMinPrice()
         );
     }
-// Flink puede tener agregaciones parciales que luego necesita combinar para obtener un resultado conjunto
-// todo se acumula en a
+
     @Override
     public StockAccumulator merge(
             StockAccumulator a,

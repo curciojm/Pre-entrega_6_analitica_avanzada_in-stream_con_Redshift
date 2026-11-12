@@ -1,6 +1,3 @@
-# El valor predeterminado no es obligatorio: es el valor que Terraform utiliza cuando no recibe uno explícito.
-# default es el que usa por default si no se pone otra cosa en tfvars, es archivo es prioridad.
-# Es el valor predeterminado de la variable, no necesariamente el nombre de un recurso.
 variable "aws_region" {
   description = "Región de AWS donde se desplegará la infraestructura."
   type        = string
@@ -33,8 +30,6 @@ variable "flink_jar_path" {
   description = "Ruta local del JAR compilado de la aplicación Flink."
   type        = string
 }
-
-# Configuración de Amazon Redshift Provisioned
 
 variable "redshift_cluster_identifier" {
   description = "Identificador del clúster de Amazon Redshift."

@@ -1,1 +1,0 @@
-{"ApplicationCodeConfigurationUpdate":{"CodeContentUpdate":{"S3ContentLocationUpdate":{"BucketARNUpdate":"arn:aws:s3:::dataeng-flink-artifacts-pre-entrega-5-2026","FileKeyUpdate":"application/stock-lakehouse-v2.jar"}}}}

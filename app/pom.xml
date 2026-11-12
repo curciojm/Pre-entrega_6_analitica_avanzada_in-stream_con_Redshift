@@ -15,7 +15,6 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <!-- Runtime -->
-        <!-- Esto debe ser compatible con el entorno donde se ejecuta Managed Flink -->
         <maven.compiler.release>11</maven.compiler.release>
         <flink.version>1.20.5</flink.version>
 
@@ -34,8 +33,6 @@
     </properties>
 
     <!-- Centralized AWS SDK versions -->
-    <!-- Este bloque utiliza un BOM (Bill of Materials) de AWS SDK -->
-    <!-- Su función es centralizar las versiones de los módulos del SDK -->
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -51,7 +48,6 @@
     <dependencies>
 
         <!-- Flink: provided by AWS Managed Flink -->
-        <!-- provided significa que se necesita esa aplicacion para compilar y se espera que el entonro la proporcione-->
         <dependency>
             <groupId>org.apache.flink</groupId>
             <artifactId>flink-streaming-java</artifactId>
@@ -121,8 +117,6 @@
         </dependency>
 
         <!-- Hadoop Configuration required by Iceberg CatalogLoader -->
-        <!-- Hadoop Common aporta clases de configuración que utiliza la integración de Iceberg. -->
-        <!-- Jackson permite trabajar con JSON, algo necesario para procesar los eventos que llegan desde Kinesis -->
         <dependency>
             <groupId>org.apache.hadoop</groupId>
             <artifactId>hadoop-common</artifactId>
@@ -164,7 +158,6 @@
             </plugin>
 
             <!-- Build executable application JAR with dependencies -->
-            <!-- El plugin Shade permite generar un JAR que incluye las dependencias necesarias -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
@@ -181,7 +174,6 @@
                             <createDependencyReducedPom>false</createDependencyReducedPom>
 
                             <transformers>
-                            <!-- Este transformer ayuda a combinar los archivos de registro de servicios de las distintas dependencias, evitando que se pierdan declaraciones necesarias al empaquetarlas -->
                                 <transformer implementation=
                                     "org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
 

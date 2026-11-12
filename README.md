@@ -97,10 +97,9 @@ Pre-entrega_6_analitica_avanzada_in-stream_con_Redshift/
 │   │               ├── StockQuote.java
 │   │               ├── StockQuoteParser.java
 │   │               └── StockWindowFunction.java
-│   ├── pom.xml
-│   └── update.json
+│   └── pom.xml
 │
-├── evidencia/
+├── evidencia.zip/
 │   └── Capturas de funcionamiento, integración,
 │       seguridad y monitoreo.
 │
@@ -118,8 +117,7 @@ Pre-entrega_6_analitica_avanzada_in-stream_con_Redshift/
 │   ├── s3.tf
 │   ├── variables.tf
 │   ├── version.tf
-│   ├── terraform.tfvars.example
-│   └── terraform.tfvars
+│   └── terraform.tfvars.example
 │
 ├── producer/
 │   └── producer.py
@@ -338,9 +336,10 @@ Desde la carpeta `infra`, crear el archivo local de variables a partir del ejemp
 cp terraform.tfvars.example terraform.tfvars
 ```
 
-Revisar los valores y configurar nombres de buckets disponibles y los parámetros necesarios para el entorno.
+El repositorio incluye `terraform.tfvars.example` como plantilla de configuración. Antes de desplegar la infraestructura, se debe crear una copia local denominada `terraform.tfvars` y completar los valores correspondientes.
 
-El archivo `terraform.tfvars` contiene configuración local y no debe publicarse en el repositorio.
+El archivo `terraform.tfvars` está excluido del control de versiones mediante `.gitignore`, por lo que no se publica en el repositorio. En cambio, `terraform.tfvars.example` sí está versionado y permite identificar las variables necesarias para configurar el entorno.
+
 
 ### Compilación de la aplicación Flink
 

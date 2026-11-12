@@ -1,4 +1,3 @@
-# Este recurso crea la base de datos del catálogo Glue
 resource "aws_glue_catalog_database" "lakehouse" {
   name         = "stock_lakehouse_${var.environment}"
   description  = "Glue database for the Stock Lakehouse project"

@@ -33,20 +33,16 @@ output "glue_database_name" {
   value       = aws_glue_catalog_database.lakehouse.name
 }
 
-# ============================================================
-# Amazon Redshift
-# ============================================================
-
 output "redshift_cluster_identifier" {
   description = "Identificador del clúster Amazon Redshift."
   value       = aws_redshift_cluster.main.cluster_identifier
 }
-# redshift_endpoint: identifica dónde está alojado el clúster y su puerto.
+
 output "redshift_endpoint" {
   description = "Endpoint de conexión del clúster Redshift."
   value       = aws_redshift_cluster.main.endpoint
 }
-# redshift_database_name: identifica la base que utilizaremos para ejecutar SQL.
+
 output "redshift_database_name" {
   description = "Nombre de la base de datos de Redshift."
   value       = aws_redshift_cluster.main.database_name
