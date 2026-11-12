@@ -15,7 +15,7 @@ La infraestructura se administra mediante Terraform y el proyecto es autónomo: 
 
 ## Arquitectura
 
-
+```mermaid
 flowchart TB
     P[Python Producer] --> K[AWS Kinesis Data Streams]
 
@@ -45,6 +45,7 @@ flowchart TB
     RS --> EX[External Schema]
     EX --> JOIN[JOIN: Streaming + Historical]
     JOIN --> OUT[Analytics Results]
+```
 
 ## Tecnologías
 
